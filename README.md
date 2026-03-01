@@ -1,273 +1,226 @@
-# 💳 Payment Search Challenge
+# Payment List Challenge
 
-Welcome to the Payment Search Challenge! This is a frontend coding challenge designed to assess your ability to implement a payment search feature using modern web technologies.
+## Overview
 
-Your task is to build a payment search interface that allows users to:
-- View payment details organised in a table
-- Search for payments by payment ID & currency and clear filters
-- Handle various edge cases and error states
-- Implement pagination for the table
+This project is a take-home challenge that implements a payment list feature using React. It includes functionality for searching, filtering, pagination, and error handling.
 
-## 📑 Table of Contents
+---
 
-- [🛠️ Tech Stack](#️-tech-stack)
-- [📡 API Documentation](#-api-documentation)
-  - [Search Payments Endpoint](#search-payments-endpoint)
-  - [Available Test Data](#available-test-data)
-- [🌐 Localization (i18n)](#-localization-i18n)
-- [📝 Evaluation Criteria](#-evaluation-criteria)
-- [💡 Tips](#-tips)
-- [📋 Implementation Steps](#-implementation-steps)
-  - [Step 1: Basic Payment List](#step-1-basic-payment-list-)
-  - [Step 2: Search by Payment ID](#step-2-search-by-payment-id-)
-  - [Step 3: Clear Filters](#step-3-clear-filters-)
-  - [Step 4: Handle Payment Not Found](#step-4-handle-payment-not-found-)
-  - [Step 5: Handle Server Error](#step-5-handle-server-error-)
-  - [Step 6: Currency Filter](#step-6-currency-filter-)
-  - [Step 7: Combined Currency and Payment ID Filter](#step-7-combined-currency-and-payment-id-filter-)
-  - [Step 8: Pagination](#step-8-pagination-)
+## Design Decisions
 
-> **Note**: We don't expect candidates to complete all steps. Please work your way through the steps incrementally, focusing on quality over quantity. Each step builds upon the previous one, so take your time to implement each feature properly.
+### State Management
 
-## 🛠️ Tech Stack
+I used **server state management with React Query** and **URL state with nuqs**.
 
-The project comes with the following pre-configured technologies:
+- **React Query** is responsible for fetching, caching, and synchronizing payment data from the API.
 
-- **React 19** - For building the user interface
-- **TypeScript** - For type safety and better developer experience
-- **Tailwind CSS** - For styling and responsive design
-- **MSW (Mock Service Worker)** - For API mocking
-- **Vitest** - For testing
-- **Testing Library** - For component testing
+- This avoids manually managing loading, error, and caching logic.
 
-> **Note**: You are free to use additional libraries, packages, or technologies to solve this challenge. Feel free to install and use any dependencies that will help you implement the features more effectively or improve the user experience.
+- It also ensures previously fetched pages and searches are cached, improving performance and user experience.
 
-> **Important**: You'll discuss your implementation in a technical interview, including your architectural decisions, trade-offs, and alternative approaches you considered. Make sure you understand every line of code you submit.
+### URL-Based Filters
 
-## 📡 API Documentation
+Filtering and search parameters are stored in the URL using **nuqs**.
 
-The project uses MSW to mock the payment search API. The API URL is defined in `src/constants/index.ts` as `API_URL = "/api/payments"`.
+This provides several benefits:
 
-### Search Payments Endpoint
+- Filters are **shareable via URL**
 
-**Endpoint:** `GET /api/payments`
+- Page refreshes preserve the current state
 
-**Description:** Search and retrieve payments with filtering and pagination support.
+- Navigation (back/forward) works correctly
 
-#### Query Parameters
+- Clear separation between **UI state** and **server state**
 
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `search` | string | No | `""` | Search term to filter payments (supports Payment ID, Status, Currency, Customer Name) |
-| `currency` | string | No | `""` | Filter by currency code (`USD`, `EUR`, `GBP`, `AUD`, `CAD`, `ZAR`) - available in `src/constants/index.ts` |
-| `page` | number | No | `1` | Page number for pagination |
-| `pageSize` | number | No | `5` | Number of payments per page |
+### Why I chose this approach
 
-#### Request Examples
+For this type of problem:
+
+- React Query handles **server state extremely well**
+
+- URL state makes the app behave more like a real production dashboard
+
+- It avoids introducing heavier global state solutions like Redux unnecessarily
+
+### Component Structure
+
+The UI is split into small reusable components:
+
+- PaymentsPage
+- Filters
+- Pagination
+- PaymentsTable
+
+This keeps responsibilities clear and improves maintainability.
+
+## Trade-offs Considered
+
+- I prioritized clarity and simplicity over adding additional libraries.
+- I avoided over-engineering the solution given the expected time investment (2–3 hours).
+
+## Assumptions
+
+- The API returns payments in a consistent format.
+- Payment IDs are unique.
+- Currency values are predefined and stable.
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js (v24)
+- npm
+
+### Installation
+
+1. Clone the repository:
 
 ```bash
-GET /api/payments?search=pay_134&currency=USD&page=1&pageSize=5
+git clone https://github.com/your-username/payment-list-challenge-react.git
+cd payment-list-challenge-react
 ```
 
-#### Response Format
+2. Install dependencies:
 
-**Success Response (200 OK):**
-```json
-{
-  "payments": [
-    {
-      "id": "pay_123456789",
-      "customerName": "John Doe",
-      "amount": 150.00,
-      "customerAddress": "123 Main St, City, Country",
-      "currency": "USD",
-      "status": "completed",
-      "date": "2024-01-15T10:30:00Z",
-      "description": "Payment for services",
-      "clientId": "cli_123"
-    }
-  ],
-  "total": 25,
-  "page": 1,
-  "pageSize": 5
-}
+```bash
+npm install
 ```
 
-#### Available Test Data
+3. Start the development server:
 
-The mock API includes the following payment IDs for testing:
-- `pay_134_1`, `pay_134_2`, `pay_134_3`, `pay_134_4`, `pay_134_5` - Various payment statuses
-- `pay_205_1`, `pay_205_2`, `pay_205_3`, `pay_205_4`, `pay_205_5` - Multiple payments with different currencies
-- `pay_404` - Returns `404` error
-- `pay_500` - Returns `500` error
-
-## 🌐 Localization (i18n)
-
-**Important**: Use the i18n constants for all user-facing text. All strings can be found in the constants files:
-
-- **Main i18n strings**: `src/constants/i18n.ts` - Contains all user-facing text including labels, buttons, messages, and table headers
-
-Import the i18n constants like this:
-```typescript
-import { I18N } from './constants/i18n';
+```bash
+npm run dev
 ```
 
-**Note**: These strings are used by our tests and scoring system, so using the exact i18n constants is required for your solution to pass validation.
+4. Open the app in your browser:
+
+```
+http://localhost:5173
+```
+
+---
+
+## Features
+
+- **Payment List**: Displays a paginated list of payments.
+- **Search**: Allows users to search for payments by ID.
+- **Filters**: Includes a currency filter and the ability to clear all filters.
+- **Pagination**: Supports navigating between pages of payments.
+- **Error Handling**: Displays appropriate error messages for "not found" or server errors.
+- **Responsive Design**: Works across desktop and mobile devices.
+
+---
+
+## Instructions for Use
+
+1. **Search Payments**: Enter a payment ID in the search bar and click "Search."
+2. **Filter by Currency**: Select a currency from the dropdown and click "Search."
+3. **Clear Filters**: Click the "Clear Filters" button to reset all filters.
+4. **Pagination**: Use the "Next" and "Previous" buttons to navigate between pages.
+5. **Keyboard accessibility**: All functionalities can be performed through keyboard
+
+---
+
+## Things I Could Improve with More Time
+
+1. **Testing**
+   - Increase unit and integration test coverage for edge cases and error states.
+   - Refactor tests into smaller, focused test suites.
+   - Add browser-based UI tests using Vitest browser mode.
+
+2. **Additional Features**
+   - Sorting (amount, date, status).
+   - Page size selection.
+   - Advanced filters (date range, status).
+   - Light / dark theming.
+   - Respect reduced motion preferences.
+
+---
+
+## Production Considerations
+
+- Filtering, searching, and pagination would be on an actual backend for scalability.
+- Introduce observability (e.g., error tracking and performance monitoring using tool like Sentry).
+- Introduce end-to-end tests.
+- Introduce feature flags for progressive rollout.
+- Add loading skeleton UI.
+- Introduce request cancellation to prevent race conditions during search.
+- Use CI/CD pipelines for automated build, testing and deployment.
+- Deploy the app to a platform like Vercel, Netlify, or AWS.
+- Add analytics to understand how users interact with search and filters.
+- Prefetch next pages of results using React Query.
+- Optimize rendering and memoization where appropriate.
+- Conduct accessibility audits.
+- Improve screen reader support and focus management.
 
 
-## 📝 Evaluation Criteria
+## Challenges Encountered
 
-Your solution will be evaluated based on:
+### Form Handling with useActionState
 
-- 🧹 Clean, maintainable code
-- 🔒 Proper TypeScript usage
-- 🏗️ Well-structured components
-- 🎯 Efficient state management
+Initially, I attempted to use `useActionState` to handle the search and currency filter form submissions.
 
-## 💡 Tips
+However, during testing in the jsdom environment, form submissions were not being intercepted correctly and the form attempted to submit to the browser. This caused issues when running tests with Vitest and React Testing Library.
 
-- **Start with Step 1 and work through each step incrementally**
-- Run tests after each step to verify your progress
-- Keep accessibility in mind throughout development
-- Use TypeScript effectively
-- Test with the provided payment IDs to verify error handling
-- Don't hesitate to install additional packages if they help you solve the problem more efficiently
-- Consider using libraries for state management, form handling, or UI components if they improve your solution
+Because of this, I switched to a more predictable approach for handling form submission that works reliably both in the browser and in the test environment.
 
-## 📋 Implementation Steps
+If this were a production system, I would revisit this once the testing environment fully supports this pattern or introduce additional testing utilities to better simulate the behavior.
 
-This challenge is designed to be completed incrementally. Each step builds upon the previous one, and you can run tests to verify your progress.
+## Notes on Provided Dependencies
 
-Good luck! 🚀
+I noticed `fast-xml-parser` was included in the repository.  
+I explored whether it was required for the challenge but did not find any XML data being returned by the API or used in the application flow.
 
-### Step 1: Basic Payment List ✅
-**Goal**: Fetch and display payments in a table with proper formatting
+Since the payments data in this implementation is JSON-based, there was no need to introduce XML parsing into the solution. I chose to avoid adding unused complexity and kept the implementation focused on the core requirements of the challenge.
 
-**Requirements**:
-- Fetch payments from the API with `page=1` and `pageSize=5`
-- Display payments in a table with headers using i18n strings (see `src/constants/i18n.ts`)
-- Format amounts and dates as per the example in the screenshot
+If the system needed to integrate with XML-based payment providers or legacy APIs, this library could be useful for transforming XML responses into a format suitable for the frontend.
 
-![Payments Page](./docs/payments_page.png)
-*The main payments interface showing the search form, filters, and payment table*
+I assumed it may have been included for extensibility or to simulate real-world dependency sets in an existing codebase.
 
-**Test to pass**: `App - Step 1: Basic Payment List`
+## Testing Notes
 
-**Command to run**: `npm run test:step1`
+The repository included an existing `App.test.tsx` file.  
+I extended the tests to improve coverage and validate additional behaviors, but intentionally kept the overall structure of the test file similar to the original version.
 
-### Step 2: Search by Payment ID ✅
-**Goal**: Add search functionality for payment IDs
+My reasoning was that the existing tests may be part of the evaluation setup for the challenge, so I focused on improving test quality without significantly altering the original testing approach.
 
-**Requirements**:
-- Add a search input with proper ARIA labels
-- Add a search button
-- Implement search functionality that queries the API
-- Use the i18n strings for labels and placeholders (see `src/constants/i18n.ts`)
+Additional improvements included:
 
-![Search by Payment ID](./docs/search_by_payment_id.png)
-*Search input for payments by payment ID*
-![Search by Payment ID](./docs/search_by_payment_id_with_search.png)
-*Searching for payments by payment ID with results displayed in the table*
+- Expanding test scenarios
+- Covering more UI states and interactions
+- Refactoring parts of the tests for clarity while keeping the original flow
 
-**Test to pass**: `App - Step 2: Search by Payment ID`
+### Error Handling Strategy
 
-**Command to run**: `npm run test:step2`
+By default, Axios throws errors for all 4XX and 5XX responses.
 
-### Step 3: Clear Filters ✅
-**Goal**: Add ability to clear all active filters
+For this project, I modified the behavior so that Axios only throws for **5XX server errors**.
 
-**Requirements**:
-- Show a "Clear Filters" button when any filter is active
-- Reset the search input to empty
-- Hide the clear button when no filters are active
+Reasoning:
 
-![Clear Filters](./docs/clear_filters.png)
-*Clear Filters button*
+- In cases where filtering or searching returns no results, the API may return a 4XX response.
+- In this scenario, the UI should display a **"Product not found"** or empty state rather than triggering the application error boundary.
+- True server failures (5XX) are still treated as application errors and will trigger the error boundary.
 
-**Test to pass**: `App - Step 3: Clear Filters`
+This allows the UI to distinguish between:
 
-**Command to run**: `npm run test:step3`
+- Expected "no results" states
+- Actual system failures
 
-### Step 4: Handle Payment Not Found ✅
-**Goal**: Display appropriate error message when payment is not found
+In a production system, the exact behavior would depend on the API contract and whether empty results are represented as a 4XX response or an empty dataset.
 
-**Requirements**:
-- Handle 404 responses from the API (use `pay_404` as the payment ID)
-- Display the error message from i18n constants
-- Show the error message in a user-friendly way
+## CI/CD and Deployment
 
-![Payment Not Found](./docs/payment_not_found.png)
-*Error message displayed when a payment is not found (404 error)*
+I added a GitHub Actions workflow at:
 
-**Test to pass**: `App - Step 4: Handle Payment Not Found`
+.github/workflows/deploy.yml
 
-**Command to run**: `npm run test:step4`
+This workflow demonstrates how the project could be automatically deployed to GitHub Pages on push to the main branch.
 
-### Step 5: Handle Server Error ✅
-**Goal**: Display error message for server errors
+The goal was to show how I would typically:
 
-**Requirements**:
-- Handle 500 responses from the API (use `pay_500` as the payment ID)
-- Display the appropriate error message from i18n
-- Ensure the error is clearly visible to users
+- Set up CI/CD for a frontend project
+- Build the application
+- Deploy it automatically
 
-![Internal Server Error](./docs/internal_server_error.png)
-*Error message displayed when a server error occurs (500 error)*
-
-**Test to pass**: `App - Step 5: Handle Server Error`
-
-**Command to run**: `npm run test:step5`
-
-### Step 6: Currency Filter ✅
-**Goal**: Add currency filtering functionality
-
-**Requirements**:
-- Add a currency dropdown with all available currencies
-- Filter payments by selected currency
-- Use proper ARIA labels for accessibility
-- Include all currencies: USD, EUR, GBP, AUD, CAD, ZAR (see `src/constants/index.ts`)
-- Clear all filters clicked should clear the currency filter
-
-![Filter by Currency](./docs/filter_by_currency.png)
-*Filtering payments by currency using the dropdown selector*
-
-**Test to pass**: `App - Step 6: Currency Filter`
-
-**Command to run**: `npm run test:step6`
-
-### Step 7: Combined Currency and Payment ID Filter ✅
-**Goal**: Ensure currency and payment ID filters work together
-
-**Requirements**:
-- Allow filtering by both currency and payment ID simultaneously
-- Ensure the API receives both filter parameters
-- Display results that match both criteria
-
-![Filter by Payment ID and Currency](./docs/filter_by_payment_id_and_currency.png)
-*Filtering payments by payment ID and currency*
-
-**Test to pass**: `App - Step 7: Combined Currency and Payment ID Filter`
-
-**Command to run**: `npm run test:step7`
-
-### Step 8: Pagination ✅
-**Goal**: Implement pagination functionality
-
-**Requirements**:
-- Display pagination controls (Previous/Next buttons) (use the [i18n strings for the buttons](./src/constants/i18n.ts) the icons are unicode characters in the i18n strings)
-- Show current page number (e.g., "Page 1")
-- Disable Previous button on first page
-- Enable Previous button after navigating to next page
-- Show different payments on different pages
-- Allow navigation back to previous pages
-
-### Pagination
-![Paginate Payments](./docs/paginate_payments_page_1.png)
-*Pagination controls allowing navigation between pages of results*
-
-![Paginate Payments](./docs/paginate_payments_page_2.png)
-*Pagination controls allowing navigation between pages of results*
-
-**Test to pass**: `App - Step 8: Pagination`
-
-**Command to run**: `npm run test:step8`
+However, GitHub Pages is currently disabled for this repository, so the deployment workflow will not run successfully in this environment.
