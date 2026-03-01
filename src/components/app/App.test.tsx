@@ -1,4 +1,5 @@
 import { screen, waitFor } from '@testing-library/react'
+import axios from 'axios'
 import { I18N } from 'constants/i18n'
 import { STATUSES } from 'constants/index'
 import { render } from 'testing-utils/render'
@@ -145,15 +146,25 @@ describe('App - Step 4: Handle Payment Not Found', () => {
 
 describe('App - Step 5: Handle Server Error', () => {
   test('should display error message when API returns 500', async () => {
+    // Although the ErrorBoundary is catching the error thrown by axios when using the app,
+    // spying on axios prevents the error thrown in the test environment
+    // before the ErrorBoundary handles it.
+    const axiosSpy = vi.spyOn(axios, 'get').mockRejectedValueOnce({
+      response: { status: 500 },
+    })
+
     const { user } = render(<App />)
 
-    const searchInput = getSearchInput()
-    const searchButton = screen.getByRole('button', { name: I18N.SEARCH_BUTTON })
+    const searchInput = await getSearchInput()
+    const searchButton = screen.getByRole('button', {
+      name: I18N.SEARCH_BUTTON,
+    })
 
     await user.type(searchInput, 'pay_500')
     await user.click(searchButton)
 
     await waitForErrorMessage(I18N.INTERNAL_SERVER_ERROR)
+    axiosSpy.mockRestore()
   })
 })
 
