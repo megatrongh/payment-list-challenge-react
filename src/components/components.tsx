@@ -1,18 +1,18 @@
-import styled from "styled-components";
+import styled from 'styled-components'
 
 export const Container = styled.div`
   width: 100%;
   max-width: 72rem;
   margin: 0 auto;
   padding: 2.5rem 1rem;
-`;
+`
 
 export const Title = styled.h2`
   font-size: 1.5rem;
   font-weight: 600;
   color: #1f2937;
   margin-bottom: 1.5rem;
-`;
+`
 
 export const FlexRow = styled.div`
   display: flex;
@@ -25,7 +25,7 @@ export const FlexRow = styled.div`
     justify-content: space-between;
     align-items: center;
   }
-`;
+`
 
 export const FilterRow = styled.div`
   display: flex;
@@ -38,7 +38,7 @@ export const FilterRow = styled.div`
     align-items: center;
     gap: 1rem;
   }
-`;
+`
 
 export const SearchInput = styled.input`
   width: 100%;
@@ -56,7 +56,7 @@ export const SearchInput = styled.input`
   @media (min-width: 768px) {
     width: 50%;
   }
-`;
+`
 
 export const Select = styled.select`
   padding: 0.5rem;
@@ -75,7 +75,7 @@ export const Select = styled.select`
   @media (min-width: 768px) {
     min-width: 120px;
   }
-`;
+`
 
 export const SearchButton = styled.button`
   padding: 0.5rem 1rem;
@@ -87,7 +87,7 @@ export const SearchButton = styled.button`
   &:hover {
     background-color: rgb(33, 65, 154);
   }
-`;
+`
 
 export const ClearButton = styled.button`
   padding: 0.5rem 1rem;
@@ -99,7 +99,7 @@ export const ClearButton = styled.button`
   &:hover {
     background-color: #4b5563;
   }
-`;
+`
 
 export const DefaultButton = styled.button`
   padding: 0.5rem 1rem;
@@ -111,7 +111,7 @@ export const DefaultButton = styled.button`
   &:hover {
     background-color: rgb(79, 85, 100);
   }
-`;
+`
 
 export const TableWrapper = styled.div`
   overflow-x: auto;
@@ -119,19 +119,19 @@ export const TableWrapper = styled.div`
   border-radius: 0.375rem;
   background-color: white;
   margin-top: 1.5rem;
-`;
+`
 
 export const Table = styled.table`
   min-width: 100%;
   text-sm: 14px;
   text-align: left;
-`;
+`
 
 export const TableHeader = styled.th`
   padding: 1rem;
   font-weight: 600;
   background-color: #f3f4f6;
-`;
+`
 
 export const TableRow = styled.tr`
   transition: background-color 0.2s ease;
@@ -139,13 +139,13 @@ export const TableRow = styled.tr`
   &:hover {
     background-color: #f1f5f9;
   }
-`;
+`
 
 export const TableCell = styled.td`
   padding: 1rem;
   font-size: 0.875rem;
   color: #4b5563;
-`;
+`
 
 export const StatusBadge = styled.span<{ status: string }>`
   padding: 0.25rem 0.75rem;
@@ -154,12 +154,12 @@ export const StatusBadge = styled.span<{ status: string }>`
   font-weight: 600;
 
   ${(props) =>
-    props.status === "completed"
+    props.status === 'completed'
       ? `background-color: #d1fae5; color: #15803d;`
-      : props.status === "pending"
-      ? `background-color: #fef3c7; color: #92400e;`
-      : `background-color: #fee2e2; color: #b91c1c;`}
-`;
+      : props.status === 'pending'
+        ? `background-color: #fef3c7; color: #92400e;`
+        : `background-color: #fee2e2; color: #b91c1c;`}
+`
 
 export const Spinner = styled.div`
   width: 1.5rem;
@@ -175,7 +175,7 @@ export const Spinner = styled.div`
       transform: rotate(360deg);
     }
   }
-`;
+`
 
 export const ErrorBox = styled.div`
   padding: 1rem;
@@ -183,7 +183,7 @@ export const ErrorBox = styled.div`
   color: #b91c1c;
   background-color: #fee2e2;
   border-radius: 0.375rem;
-`;
+`
 
 export const EmptyBox = styled.div`
   color: #4b5563;
@@ -191,7 +191,7 @@ export const EmptyBox = styled.div`
   background-color: #f9fafb;
   padding: 1rem;
   border-radius: 0.375rem;
-`;
+`
 
 export const PaginationRow = styled.div`
   display: flex;
@@ -201,7 +201,7 @@ export const PaginationRow = styled.div`
   border-top: 1px solid #e5e7eb;
   font-size: 0.875rem;
   color: #374151;
-`;
+`
 
 export const PaginationButton = styled.button`
   padding: 0.25rem 0.75rem;
@@ -217,16 +217,16 @@ export const PaginationButton = styled.button`
     opacity: 0.5;
     cursor: not-allowed;
   }
-`;
+`
 
 export const TableHeaderWrapper = styled.thead`
   background-color: #f9fafb; /* Slightly darker background to differentiate the header */
-`;
+`
 
 export const TableHeaderRow = styled.tr`
   border-bottom: 2px solid #e5e7eb;
-`;
+`
 
 export const TableBodyWrapper = styled.tbody`
   background-color: white;
-`;
+`

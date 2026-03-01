@@ -1,0 +1,11 @@
+# files to ignore
+dist
+node_modules
+coverage
+.vite
+build
+.cache
+.env
+.env.local
+.env.*.local
+junit.xml
