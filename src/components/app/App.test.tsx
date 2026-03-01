@@ -1,7 +1,7 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { format } from 'date-fns'
+import { I18N } from '../../constants/i18n'
 import App from './App'
-import { I18N } from './constants/i18n'
 
 // Helper function to robustly check for error messages with better debugging
 export const waitForErrorMessage = async (expectedMessage: string, timeout = 10000) => {

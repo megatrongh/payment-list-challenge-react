@@ -1,0 +1,17 @@
+import { I18N } from 'constants/i18n'
+
+interface AppLayoutProps {
+  children: React.ReactNode
+}
+export function AppLayout(props: AppLayoutProps) {
+  return (
+    <div className="app min-h-screen bg-gray-50">
+      <header className="bg-white shadow-sm">
+        <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+          <h1 className="text-3xl-semibold text-text-base">{I18N.APP_TITLE}</h1>
+        </div>
+      </header>
+      <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">{props.children}</main>
+    </div>
+  )
+}
