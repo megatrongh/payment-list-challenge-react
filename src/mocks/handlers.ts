@@ -1,5 +1,8 @@
 import { http, HttpResponse } from 'msw'
-import { API_URL } from '../constants'
+import { Payment, PaymentID } from 'types'
+
+import { PaymentResponse } from 'apis/getPayments'
+import { API_URL } from 'constants/index'
 import {
   mockPayments000,
   mockPayments123,
@@ -10,7 +13,7 @@ import {
 } from './mockPaymentsData'
 
 // Create a map of all payments for easy lookup
-const allPayments: any[] = [
+const allPayments: Payment[] = [
   ...mockPayments134,
   ...mockPayments456,
   ...mockPayments789,
@@ -20,7 +23,7 @@ const allPayments: any[] = [
 ]
 
 // Create a map for payment ID lookup
-const paymentIdMap: { [key: string]: any } = {}
+const paymentIdMap: Record<PaymentID, Payment> = {}
 allPayments.forEach((payment) => {
   paymentIdMap[payment.id] = payment
 })
@@ -48,7 +51,7 @@ export const handlers = [
       )
     }
 
-    let filteredPayments: any[] = []
+    let filteredPayments: Payment[] = []
 
     // Filter payments based on search criteria and filters
     filteredPayments = allPayments.filter((pay) => {
@@ -73,7 +76,7 @@ export const handlers = [
     const start = (page - 1) * pageSize
     const paginatedPayments = filteredPayments.slice(start, start + pageSize)
 
-    const responsePayload: any = {
+    const responsePayload: PaymentResponse = {
       payments: paginatedPayments,
       total,
       page,
